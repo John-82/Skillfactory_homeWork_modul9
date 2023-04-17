@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>Задание4_модуль9</title>
+    <link href="style.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+	<main>
+		<section>
+			<div class="wrapper">
+				<div class="input">
+					<h3>ширина картинки</h3>
+					<input class="width" type="text" placeholder="диапазон от 100 до 300 ">
+					<div class="text-width"></div>
+				</div>
+				<div class="symbol"></div>
+				<div class="input">
+					<h3>высота картинки</h3>
+					<input class="height" type="text" placeholder="диапазон от 100 до 300 ">
+					<div class="text-height"></div>
+				</div>
+			</div>
+				<div class="btno"><button class="btn" type="submit">click here</button>
+				</div>
+				<div class="content"></div>
+		</section>
+	</main>
+  
+  <script>
+    const width = document.querySelector('.width');
+const height = document.querySelector('.height');
+const textW = document.querySelector('.text-width');
+const textH = document.querySelector('.text-height');
+const btn = document.querySelector('.btn');
+const content = document.querySelector('.content');
+
+// Функция, которая возвращаем fetch
+const useRequest = (url) => {
+	
+	return fetch(url)
+	  .then((response) => {
+		console.log('response', response);
+		return response.json();
+	  })
+	  .then((json) => { return json; })
+	  .catch(() => { console.log('error') });
+
+	  
+  }
+  
+
+const displayResult = (apiData) => {
+	let cards = '';
+	
+    if( ! +width.value || width.value  > 300 || width.value < 100 ) {
+		
+		textW.innerHTML = 'Число вне диапазона от 100 до 300';
+		setTimeout(() => {
+			textW.innerHTML = ' ';
+		}, 3000);
+	
+	}else if(! +height.value || height.value  > 300 || height.value < 100) {	
+		    
+		textH.innerHTML = 'Число вне диапазона от 100 до 300';
+		setTimeout(() => {
+			textH.innerHTML = ' ';
+		}, 3000);
+	
+	}else {
+		apiData.forEach(item => {
+		let cardBlock = `
+			  <div class="card">
+				<img
+				  src="${item.download_url}"
+				  class="card-image" style='width:${width.value}px; height:${height.value}px;' 
+				/>
+			  </div>
+			`;
+			cards = cards + cardBlock;
+		});
+		content.innerHTML = cards;
+	};
+  }
+
+ 
+  
+  const randomNum = Math.floor(Math.random() * 30);
+ 
+  btn.addEventListener('click', async () => {
+	
+	let requestResult = await useRequest(`https://picsum.photos/v2/list?page=${randomNum}&limit=${randomNum}`);
+
+	let displayR = await displayResult(requestResult );
+    let requsJ = JSON.stringify(requestResult);
+	let strJson = localStorage.setItem('myJSON',requsJ);
+  });
+
+  document.addEventListener("DOMContentLoaded", async () => {
+
+	let myJSON = localStorage.getItem('myJSON');
+	let obiJ = JSON.parse(myJSON);
+	
+	console.log(obiJ);
+	let cards = '';
+		obiJ.forEach(item => {
+			let cardBlock = `
+				  <div class="card">
+					<img
+					  src="${item.download_url}"
+					  class="card-image" style='width: 30vw; height: auto;' 
+					/>
+				  </div>
+				`;
+				cards = cards + cardBlock;
+				
+			});
+		content.innerHTML = cards;
+	});
+  </script>
+	
+</body>
+</html>

@@ -1,0 +1,17 @@
+.btn {
+  background-color: red;
+  text-transform: uppercase;
+}
+
+.btn:hover {
+  background-color: white;
+}
+
+h3 {
+  font-family: impact;
+}
+
+.btno {
+  margin-top: 20px;
+  margin-bottom: 50px;
+}

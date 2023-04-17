@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>Финальное задание_модуль9</title>
+  <link href="style.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+	<p>Введите номер страницы в диапазоне от 1 до 10:</p>
+    <input id="page-number" placeholder="Номер страницы">
+    <br><br>
+	<p>Введите лимит в диапазоне от 1 до 10:</p>
+    <input id="limit" placeholder="Лимит">
+    <br><br>
+    <button class="btn">click here</button>
+    <br><br>
+    <span></span>
+    <br><br>
+    <div class="continer"></div>
+  
+  <script>
+  const inputPageNumber = document.getElementById("page-number");
+const inputLimit = document.getElementById("limit");
+const submitButton = document.querySelector(".btn");
+const outputSpan = document.querySelector("span");
+const photosContainer = document.querySelector("div");
+
+submitButton.addEventListener("click", submitButtonHandle);
+
+if (loadPhotosFromLocalStorage())
+    write("Последние просмотренные фото.");
+
+function submitButtonHandle() {
+    const pageNumber = inputPageNumber.value;
+    const limit = inputLimit.value;
+
+    if ((pageNumber < 1 || pageNumber > 10 || isNaN(pageNumber)) && (limit < 1 || limit > 10 || isNaN(limit))) {
+        write("Номер страницы и лимит вне диапазона от 1 до 10.");
+        return;
+    } else
+    if (pageNumber < 1 || pageNumber > 10 || isNaN(pageNumber)) {
+        write("Номер страницы задан вне диапазона.");
+        return;
+    } else
+    if (limit < 1 || limit > 10 || isNaN(limit)) {
+        write("Лимит задан вне диапазона.");
+        return;
+    }
+
+    write("Загружается фото...");
+
+    fetch(`https://picsum.photos/v2/list?page=${pageNumber}&limit=${limit}`)
+        .then((response) => response.json())
+        .then((json) => {
+            loadPhotos(json);
+            savePhotosToLocalStorage();
+            write("Фото загружены.");
+        })
+        .catch((reason) => {
+            write("Возникла шибка: " + reason);
+        });
+}
+
+function write(text) {
+    outputSpan.innerHTML = text;
+}
+
+function loadPhotos(apiData) {
+    let cards = String();
+
+    apiData.forEach(item => {
+        const cardBlock = `<div><img src="${item.download_url}" style="width: 150px; margin-right: 30px"/>
+        <p style="color:grey; font-family: arial">${item.author}</p></div>`;
+        cards += cardBlock;
+    });
+
+    photosContainer.innerHTML = cards;
+}
+
+function savePhotosToLocalStorage() {
+    localStorage.setItem("last_photos", photosContainer.innerHTML);
+}
+
+function loadPhotosFromLocalStorage() {
+    photosContainer.innerHTML = localStorage.getItem("last_photos");
+    return  photosContainer.innerHTML.length > 0;
+}
+  </script>
+  
+</body>
+</html>

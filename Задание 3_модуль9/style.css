@@ -1,0 +1,19 @@
+.card-image {
+    display: block;
+    width: 200px;
+    height: 150px;
+}
+.card, .btn {
+    margin-top: 10px;
+}
+.btn {
+   background-color: red
+  }
+
+.btn:hover {
+    background-color: coral;
+}
+
+p {
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+}

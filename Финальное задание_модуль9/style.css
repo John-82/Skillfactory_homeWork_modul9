@@ -1,0 +1,19 @@
+.btn {
+  background-color: red;
+  text-transform: uppercase;
+}
+
+.btn:hover {
+  background-color: white;
+}
+
+p {
+  font-family: impact;
+}
+
+.continer {
+  display: flex;
+  flex-flow: wrap; 
+  flex-direction: row;
+  width: 1000px;
+}
